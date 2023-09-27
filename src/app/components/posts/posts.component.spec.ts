@@ -26,10 +26,7 @@ describe('PostsComponent', () => {
     TestBed.configureTestingModule({
       providers: [
         PostsComponent,
-          {
-            provide: PostService,
-            useClass: mockPostService,
-          }
+        { provide: PostService, useClass: mockPostService }
       ]
     });
 
@@ -43,7 +40,7 @@ describe('PostsComponent', () => {
     expect(component.posts.length).toBe(2);
   });
 
-  it('Should call the delete method in Post Service Only Once', () => {
+  it('Should call the deletePost method in Post Service Only Once', () => {
     spyOn(postService, 'deletePost').and.returnValue(of(true));
     component.posts = POSTS;
     component.delete(POSTS[2]);
