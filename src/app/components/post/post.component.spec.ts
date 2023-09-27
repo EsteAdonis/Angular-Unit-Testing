@@ -3,6 +3,7 @@ import { PostComponent } from "./post.component";
 import { first } from "rxjs";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { By } from "@angular/platform-browser";
 
 
 describe('Post Component', () => { 
@@ -38,4 +39,11 @@ describe('Post Component', () => {
     const a = postElement.querySelector('a');
     expect(a?.textContent).toContain(post.title);
   })  
+
+  it('Should render the post title in the anchor element using debug element', () => {
+    fixture.detectChanges();
+    const postElement = fixture.debugElement;
+    const aElement = postElement.query(By.css('a')).nativeElement; 
+    expect(aElement?.textContent).toContain(post.title);
+  })   
 });
