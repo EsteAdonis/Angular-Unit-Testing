@@ -26,11 +26,9 @@ describe('Post Component', () => {
   });
 
   it('Should raise and event when the delete post is clicked', () => { 
-    comp.post = post;
     comp.delete.pipe(first()).subscribe( selectedPost => {
       expect(selectedPost).toEqual(post);
     })
-
     comp.onDeletePost(new MouseEvent('click'));
   })
 
