@@ -17,7 +17,6 @@ describe('PostsComponent', () => {
   let mockPostService: any;
   let fixture: ComponentFixture<PostsComponent>;
 
-
   beforeEach(() => {
     mockPostService = jasmine.createSpyObj('PostService', ['getPost', 'deletePost']);
     mockPostService.deletePost.and.returnValue(of(true));
@@ -59,6 +58,8 @@ describe('PostsComponent', () => {
     expect(component.posts.length).toBe(3);
   });
 
+  // This sections is testing the child component
+
   it('Should create one post child Element for each post', () => {
     fixture.detectChanges();      
     const debugElement = fixture.debugElement;
@@ -69,7 +70,13 @@ describe('PostsComponent', () => {
   it('Should create exact same number of Post Component with Post', () => {
     fixture.detectChanges();
     const postComponentDEs = fixture.debugElement.queryAll(By.directive(PostComponent));
-    console.log(postComponentDEs);
     expect(postComponentDEs.length).toEqual(POSTS.length);
   });
+
+  it('Should check whether exact post is sending to PostComponent', () => {
+    fixture.detectChanges();
+    const postComponentDEs = fixture.debugElement.queryAll(By.directive(PostComponent));
+    let postComponentInstance = postComponentDEs[0].componentInstance as PostComponent;
+    expect(postComponentInstance.post.title).toEqual(POSTS[0].title);
+  });  
 })
