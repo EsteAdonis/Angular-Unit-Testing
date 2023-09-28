@@ -4,6 +4,7 @@ import { PostsComponent } from "./posts.component";
 import { of } from "rxjs";
 import { PostService } from 'src/app/services/Post/post.service';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('PostsComponent', () => {
   const POSTS: Post[] = [
@@ -34,7 +35,6 @@ describe('PostsComponent', () => {
       providers: [
         { provide: PostService, useValue: mockPostService }
       ]
-      // ,schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     });
     
     fixture = TestBed.createComponent(PostsComponent);
@@ -64,4 +64,11 @@ describe('PostsComponent', () => {
     fixture.detectChanges();
     expect(component.posts.length).toBe(3);
   });
+
+  it('Should create one post child Element for each post', () => {
+    fixture.detectChanges();      
+    const debugElement = fixture.debugElement;
+    const postElement = debugElement.queryAll(By.css('.posts'));
+    expect(postElement.length).toBe(POSTS.length);
+  })
 })
