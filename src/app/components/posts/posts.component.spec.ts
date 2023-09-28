@@ -3,8 +3,9 @@ import { Post } from "src/app/models/Post";
 import { PostsComponent } from "./posts.component";
 import { of } from "rxjs";
 import { PostService } from 'src/app/services/Post/post.service';
-import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { PostComponent } from '../post/post.component';
 
 describe('PostsComponent', () => {
   const POSTS: Post[] = [
@@ -16,14 +17,6 @@ describe('PostsComponent', () => {
   let mockPostService: any;
   let fixture: ComponentFixture<PostsComponent>;
 
-  @Component({    // This class is used to avoid CUSTOM_ELEMENTS_SCHEMA
-    selector: 'app-post',
-    template: '<div></div>'
-  })
-    
-  class FakePostComponent{  // Fake Child Component
-    @Input() post!: Post;
-  }
 
   beforeEach(() => {
     mockPostService = jasmine.createSpyObj('PostService', ['getPost', 'deletePost']);
@@ -31,10 +24,11 @@ describe('PostsComponent', () => {
     mockPostService.getPost.and.returnValue(of(POSTS));
 
     TestBed.configureTestingModule({
-      declarations: [ PostsComponent, FakePostComponent ],
+      declarations: [ PostsComponent, PostComponent ],
       providers: [
         { provide: PostService, useValue: mockPostService }
       ]
+      , schemas: [NO_ERRORS_SCHEMA]
     });
     
     fixture = TestBed.createComponent(PostsComponent);
@@ -71,4 +65,11 @@ describe('PostsComponent', () => {
     const postElement = debugElement.queryAll(By.css('.posts'));
     expect(postElement.length).toBe(POSTS.length);
   })
+
+  it('Should create exact same number of Post Component with Post', () => {
+    fixture.detectChanges();
+    const postComponentDEs = fixture.debugElement.queryAll(By.directive(PostComponent));
+    console.log(postComponentDEs);
+    expect(postComponentDEs.length).toEqual(POSTS.length);
+  });
 })
