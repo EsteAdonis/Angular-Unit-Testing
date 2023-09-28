@@ -11,7 +11,7 @@ describe('PostsComponent', () => {
   const POSTS: Post[] = [
     { id: 1, body: 'Body1', title: 'title 1' },
     { id: 2, body: 'Body2', title: 'title 2' },
-    { id: 1, body: 'Body3', title: 'title 3' },
+    { id: 3, body: 'Body3', title: 'title 3' },
   ];
   let component: PostsComponent;
   let mockPostService: any;
@@ -78,5 +78,28 @@ describe('PostsComponent', () => {
     const postComponentDEs = fixture.debugElement.queryAll(By.directive(PostComponent));
     let postComponentInstance = postComponentDEs[0].componentInstance as PostComponent;
     expect(postComponentInstance.post.title).toEqual(POSTS[0].title);
-  });  
+  });
+
+  it('Should call delete method when post component button is clicked', () => {
+    spyOn(component, 'delete');
+    mockPostService.getPost.and.returnValue(of(POSTS));
+    fixture.detectChanges();
+
+    let postComponentDEs = fixture.debugElement.queryAll(By.directive(PostComponent));
+        
+    postComponentDEs[0]
+      .query(By.css('button'))
+      .triggerEventHandler('click', { preventDefault: () => { } });
+
+    expect(component.delete).toHaveBeenCalledWith(POSTS[0]);
+
+    for (let i = 0; i < postComponentDEs.length; i++)
+    {
+      postComponentDEs[i]  
+        .query(By.css('button'))
+        .triggerEventHandler('click', { preventDefault: () => { } });    
+      
+      expect(component.delete).toHaveBeenCalledWith(POSTS[1]);      
+    }
+  });
 })
