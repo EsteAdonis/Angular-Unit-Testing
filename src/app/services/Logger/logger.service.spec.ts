@@ -6,7 +6,9 @@ describe('LoggerService', () => {
   let service: LoggerService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [LoggerService]
+    });
     service = TestBed.inject(LoggerService);
   });
 
@@ -20,7 +22,7 @@ describe('LoggerService', () => {
     expect(service.messages.length).toBe(1);
   })
 
-  it(`Should Match The Message ''`, () => {
+  it(`Should Match The Message 'Add operation executed'`, () => {
     let message = "Add operation executed";
     service.log(message);
     expect(service.messages.find(message => message === "Add operation executed")).toBeTruthy();
