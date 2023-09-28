@@ -3,7 +3,7 @@ import { Post } from "src/app/models/Post";
 import { PostsComponent } from "./posts.component";
 import { of } from "rxjs";
 import { PostService } from 'src/app/services/Post/post.service';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
 
 describe('PostsComponent', () => {
   const POSTS: Post[] = [
@@ -15,17 +15,26 @@ describe('PostsComponent', () => {
   let mockPostService: any;
   let fixture: ComponentFixture<PostsComponent>;
 
+  @Component({    // This class is used to avoid CUSTOM_ELEMENTS_SCHEMA
+    selector: 'app-post',
+    template: '<div></div>'
+  })
+    
+  class FakePostComponent{  // Fake Child Component
+    @Input() post!: Post;
+  }
+
   beforeEach(() => {
     mockPostService = jasmine.createSpyObj('PostService', ['getPost', 'deletePost']);
     mockPostService.deletePost.and.returnValue(of(true));
     mockPostService.getPost.and.returnValue(of(POSTS));
 
     TestBed.configureTestingModule({
-      declarations: [ PostsComponent ],
+      declarations: [ PostsComponent, FakePostComponent ],
       providers: [
         { provide: PostService, useValue: mockPostService }
-      ],
-      schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+      ]
+      // ,schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
     });
     
     fixture = TestBed.createComponent(PostsComponent);
