@@ -23,7 +23,7 @@ describe('PostsComponent', () => {
     mockPostService.getPost.and.returnValue(of(POSTS));
 
     TestBed.configureTestingModule({
-      declarations: [ PostsComponent, PostComponent ],
+      declarations: [PostsComponent, PostComponent],
       providers: [
         { provide: PostService, useValue: mockPostService }
       ]
@@ -61,7 +61,7 @@ describe('PostsComponent', () => {
   // This sections is testing the child component
 
   it('Should create one post child Element for each post', () => {
-    fixture.detectChanges();      
+    fixture.detectChanges();
     const debugElement = fixture.debugElement;
     const postElement = debugElement.queryAll(By.css('.posts'));
     expect(postElement.length).toBe(POSTS.length);
@@ -93,13 +93,25 @@ describe('PostsComponent', () => {
 
     expect(component.delete).toHaveBeenCalledWith(POSTS[0]);
 
-    for (let i = 0; i < postComponentDEs.length; i++)
-    {
-      postComponentDEs[i]  
+    for (let i = 0; i < postComponentDEs.length; i++) {
+      postComponentDEs[i]
         .query(By.css('button'))
-        .triggerEventHandler('click', { preventDefault: () => { } });    
+        .triggerEventHandler('click', { preventDefault: () => { } });
       
-      expect(component.delete).toHaveBeenCalledWith(POSTS[1]);      
+      expect(component.delete).toHaveBeenCalledWith(POSTS[i]);
     }
   });
+
+  it('Should call the delete method when the delete event is emitted is Post Component', () => {
+    spyOn(component, 'delete');
+    mockPostService.getPost.and.returnValue(of(POSTS));
+    fixture.detectChanges();
+
+    let postComponentDEs = fixture.debugElement.queryAll(By.directive(PostComponent));
+    for (let i = 0; i < postComponentDEs.length; i++)
+    {
+      (postComponentDEs[i].componentInstance as PostComponent).delete.emit(POSTS[i]);
+      expect(component.delete).toHaveBeenCalledWith(POSTS[i]);
+    }
+  })
 })
