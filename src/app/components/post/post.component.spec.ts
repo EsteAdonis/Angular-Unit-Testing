@@ -26,7 +26,7 @@ describe('Post Component', () => {
     expect(comp).toBeDefined();
   });
 
-  // Note: Testing HTML <a> tag
+  // NOTE: Testing HTML <a> tag
   it('Should render the post title in the anchor element', () => {
     const post: Post = { id: 1, body: 'body 1', title: 'title 1' };
     comp.post = post;
@@ -35,6 +35,16 @@ describe('Post Component', () => {
     const a = postElement.querySelector('a');
     expect(a?.textContent).toContain(post.title);
   })
+
+  // NOTE: Testing HTML <a> tag using debug element
+  it('Should render the post title in the anchor element using debug element', () => {
+    const post: Post = { id: 1, body: 'body 1', title: 'title 1' };
+    comp.post = post;
+    fixture.detectChanges();
+    const postDebugElement = fixture.debugElement;
+    const aElement: HTMLElement = postDebugElement.query(By.css('a')).nativeElement;
+    expect(aElement?.textContent).toContain(post.title);
+  })  
 
   it('Should raise and event when the delete post is clicked', () => { 
     comp.delete.pipe(first()).subscribe( selectedPost => {
