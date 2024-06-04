@@ -26,6 +26,16 @@ describe('Post Component', () => {
     expect(comp).toBeDefined();
   });
 
+  // Note: Testing HTML <a> tag
+  it('Should render the post title in the anchor element', () => {
+    const post: Post = { id: 1, body: 'body 1', title: 'title 1' };
+    comp.post = post;
+    fixture.detectChanges();
+    const postElement = HTMLElement = fixture.nativeElement;
+    const a = postElement.querySelector('a');
+    expect(a?.textContent).toContain(post.title);
+  })
+
   it('Should raise and event when the delete post is clicked', () => { 
     comp.delete.pipe(first()).subscribe( selectedPost => {
       expect(selectedPost).toEqual(post);
